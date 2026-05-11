@@ -1,0 +1,133 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Student or Admin user profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "points": { "type": "number" },
+        "hasPaid": { "type": "boolean" },
+        "paymentReference": { "type": "string" },
+        "registrationFee": { "type": "number" },
+        "role": { "type": "string", "enum": ["student", "admin"] },
+        "bio": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email", "role", "points"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "Educational course category",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "category": { "type": "string", "enum": ["Mathematics", "Science", "Mechanical Engineering", "ICT", "Bible Study"] },
+        "description": { "type": "string" },
+        "thumbnail": { "type": "string" }
+      },
+      "required": ["title", "category", "description"]
+    },
+    "Lesson": {
+      "title": "Lesson",
+      "description": "Individual lesson within a course",
+      "type": "object",
+      "properties": {
+        "courseId": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "pdfUrl": { "type": "string" },
+        "order": { "type": "number" }
+      },
+      "required": ["courseId", "title", "content", "order"]
+    },
+    "Quiz": {
+      "title": "Quiz",
+      "description": "Assessment for a lesson or course",
+      "type": "object",
+      "properties": {
+        "lessonId": { "type": "string" },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": { "type": "string" },
+              "options": { "type": "array", "items": { "type": "string" } },
+              "correctAnswer": { "type": "number" }
+            }
+          }
+        }
+      },
+      "required": ["lessonId", "questions"]
+    },
+    "QuizResult": {
+      "title": "QuizResult",
+      "description": "User performance in a quiz",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "quizId": { "type": "string" },
+        "score": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "quizId", "score"]
+    },
+    "TopicRequest": {
+      "title": "TopicRequest",
+      "description": "Student request for a new topic",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "topic": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "completed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "topic", "status"]
+    },
+    "Quote": {
+      "title": "Quote",
+      "description": "Motivational quote of the day",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "author": { "type": "string" }
+      },
+      "required": ["text", "author"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/courses/{courseId}": {
+      "schema": "Course",
+      "description": "Available courses"
+    },
+    "/lessons/{lessonId}": {
+      "schema": "Lesson",
+      "description": "Lesson content"
+    },
+    "/quizzes/{quizId}": {
+      "schema": "Quiz",
+      "description": "Quiz definitions"
+    },
+    "/quiz_results/{resultId}": {
+      "schema": "QuizResult",
+      "description": "Scores for leaderboard"
+    },
+    "/requests/{requestId}": {
+      "schema": "TopicRequest",
+      "description": "Student requests"
+    },
+    "/quotes/{quoteId}": {
+      "schema": "Quote",
+      "description": "Motivational quotes"
+    }
+  }
+}
